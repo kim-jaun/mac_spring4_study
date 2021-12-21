@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!-- boardList(백리향) jstl과 유사한 역할 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" >
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<style type="text/css"> 
+	.err {color: red; font-weight: bold; }
+	th { background: green; color: white; }
+</style>
+</head><body>
+<div class="container" align="center">
+	<h2 class="text-primary">게시글 목록</h2>
+<table class="table table-striped">
+	<tr><th>글번호</th><th>제목</th><th>조회수</th><th>작성일</th></tr>
+	<!-- list에 데이터가 있으면 list있는 데이터를 하나씩 board 넘겨서 처리하라 데이터 없을 때까지 -->
+	<tr th:if="${#lists.size(list)} > 0" th:each="board:${list}">
+		<td th:text="${board.boardIdx}"></td>
+		<td><a href="/board/boardDetail.do?boardIdx="
+				th:attrappend="href=${board.boardIdx}" 
+				th:text="${board.title}" class="btn btn-success btn-sm"></a></td>
+		<td th:text="${board.hitCnt}"></td>
+		<td th:text="${board.createdDate}"></td></tr>
+	<tr th:unless="${#lists.size(list)} > 0">
+		<td colspan="4">데이터가 없습니다</td></tr>
+</table>
+<div align="center"><a href="/board/boardWriteForm.do" class="btn btn-info">글쓰기</a></div>
+</div>
+</body>
+</html>

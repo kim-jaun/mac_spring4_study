@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" >
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<style type="text/css">
+	.err {
+		color: red;
+		font-weight: bold;
+	}
+	th {
+		background: green;
+		color: white;
+	}
+</style>
+<script type="text/javascript">
+	function deptnoChk() {
+		if (!frm.deptno.value) {
+			alert("부서코드를 입력한 후에 체크하시오");
+			frm.deptno.focus();
+			return false;
+		}
+		$.post("/dept/deptnoChk.do", "deptno=" + frm.deptno.value, function(data){
+			$('#disp').html(data);
+		})
+	}
+</script>
+</head>
+<body>
+	<div class="container" align="center">
+		<h2 class="text-primary">부서정보 입력</h2>
+		<form acrion="/dept/deptInsert.do" method="post" name="frm">
+			<table class="table table-bordered">
+				<tr>
+					<th>부서코드</th>
+					<td>
+						<input type="number" name="deptno" required="required" autofocus>
+						<input type="button" value="중복체크" onclick="deptnoChk()" class="btn btn-warning btn-sm">
+						<div class="err" id="disp"></div>
+					</td>
+				</tr>
+				<tr>
+					<th>부서명</th>
+					<td>
+						<input type="text" name="dname" required>
+					</td>
+				</tr>
+				<tr>
+					<th>근무지</th>
+					<td>
+						<input type="text" name="loc" required>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" value="확인">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>
