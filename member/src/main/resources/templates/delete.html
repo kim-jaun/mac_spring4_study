@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!-- boardList(백리향) jstl과 유사한 역할 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<title>Insert title here</title></head><body>
+<span th:if="${result} > 0">
+	<script type="text/javascript">
+		alert("탈퇴했어 !!  꺼져 !");
+		location.href="loginForm.do";
+	</script>
+</span>
+<span th:if="${result} == 0">
+	<script type="text/javascript">
+		alert("탈퇴 안돼지 !  메롱");
+		history.go(-1);
+	</script>
+</span>
+</body>
+</html>

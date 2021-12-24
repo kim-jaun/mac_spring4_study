@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- boardList(백리향) jstl과 유사한 역할 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" >
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<style type="text/css"> 
+	.err {color: red; font-weight: bold; }
+	th { background: green; color: white; }
+</style></head><body>
+<div class="container" align="center">
+	<h2 class="text-primary">부서 목록</h2>
+<table class="table table-striped">
+	<tr><th>부서모드</th><th>부서명</th><th>근무지</th><th>수정</th><th>삭제</th></tr>
+	<tr th:if="${#lists.size(list)} == 0">
+		<td colspan="5">부서 데이터가 없습니다</td></tr>
+	<tr th:if="${#lists.size(list)} > 0" th:each="dept:${list}">
+		<td th:text="${dept.deptno}"></td>
+		<td><a th:href="@{/emp/empList.do(deptno=${dept.deptno})}" 
+			th:text="${dept.dname}" class="btn btn-success btn-sm"></a> </td>
+		<td th:text="${dept.loc}"></td>
+		<!-- <a th:href="@{/dept/deptUpdateForm.do(deptno=${dept.deptno},dname=${dept.dname})}"  -->
+		<td><a th:href="@{/dept/updateDeptForm.do(deptno=${dept.deptno})}" 
+			 class="btn btn-warning btn-sm">수정</a> </td>
+		<td><a href="/dept/deleteDept.do?deptno=" 
+			th:attrappend="href=${dept.deptno}"
+			 class="btn btn-danger btn-sm">삭제</a> </td></tr>
+</table>
+<a class="btn btn-info" href="/dept/insertDeptForm.do">부서입력</a>
+<a class="btn btn-default" href="/emp/empAllList.do">전 직원 목록</a>
+</div>
+</body>
+</html>

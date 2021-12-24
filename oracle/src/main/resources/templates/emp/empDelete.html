@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Insert title here</title>
+</head><body>
+<span th:if="${result} > 0">
+	<script type="text/javascript">
+		alert("삭제 성공");
+		location.href="empList.do?deptno="+[[${emp.deptno}]];
+	</script>
+</span>
+<span th:if="${result} == 0">
+	<script type="text/javascript">
+		alert("삭제 실패");
+		history.back();
+	</script>
+</span>
+</body>
+</html>

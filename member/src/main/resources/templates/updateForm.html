@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- boardList(백리향) jstl과 유사한 역할 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Insert title here</title>
+<style type="text/css">
+	.drag-over {	background-color: #ff0;	}
+	.thumb {	width: 200px;	padding: 5px;		float: left;	}	
+	.thumb > img {	width: 100%;	}	
+	.thumb > .close {	position: absolute;	background-color: red;	cursor: pointer;	}
+	#drop { border: 1px solid black; width: 300px; height: 200px; padding: 3px; }
+	#pic, div { float: left; }
+</style>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" >
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+	function chk() {
+		if (frm.password.value != frm.password2.value) {
+			alert("암호와 암호 확인 다릅니다"); frm.password.focus();  // 커서
+			frm.password.value = "";	// 암호 데이터 지우기 
+			return false;   // action하지 마라
+		}
+	}
+	$(document).on("drop", function(e) {
+		// preview
+	    $("input[type='file']")
+	        .prop("files", e.originalEvent.dataTransfer.files);  // put files into element
+	});
+	$(function() {
+		var uploadFiles = [];
+		var $drop = $("#drop");
+		$drop.on("dragenter", function(e) { //드래그 요소가 들어왔을떄
+			$(this).addClass('drag-over');
+		}).on("dragleave", function(e) { //드래그 요소가 나갔을때
+			$(this).removeClass('drag-over');
+		}).on("dragover", function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+		}).on('drop', function(e) { //드래그한 항목을 떨어뜨렸을때
+			e.preventDefault();
+			$(this).removeClass('drag-over');
+			var files = e.originalEvent.dataTransfer.files; //드래그&드랍 항목
+ 			for (var i = 0; i < files.length; i++) {
+				var file = files[i];
+				var size = uploadFiles.push(file); //업로드 목록에 추가
+				preview(file, size - 1); //미리보기 만들기
+			} 
+		});
+		$("#thumbnails").on("click", function(e) {
+			var $target = $(e.target);
+			var idx = $target.attr('data-idx');
+			$target.parent().remove(); //프리뷰 삭제
+		});	
+	});
+	function preview(file) {
+		var reader = new FileReader();
+		reader.onload = (function(f) {
+			return function(e) {
+				var div = '<div class="thumb"><div class="close">X</div><img src="'+ 
+					e.target.result+ '"/></div>';
+				$("#thumbnails").append(div);
+			};
+		})(file);
+		reader.readAsDataURL(file);
+		// readAsDataURL : 컨텐츠를 특정 Blob 이나 File에서 읽어 오는 역할을 합니다
+	}		 
+</script>
+</head><body>
+<div class="container" align="center">
+	<h2 class="text-primary">회원정보 수정</h2>
+<form action="update.do" method="post" enctype="multipart/form-data" 
+		name="frm" onsubmit="return chk()">
+	<input type="hidden" name="id" th:value="${member.id }">
+<table class="table table-bordered table-hover">
+	<tr><td>아이디 <span class="glyphicon glyphicon-user"></span></td>
+		<td th:text="${member.id }"></td></tr>
+	<tr><td>암호 <span class="glyphicon glyphicon-lock"></span></td>
+		<td><input type="password" name="password" required="required"
+			autofocus="autofocus"></td></tr>
+	<tr><td>암호확인 <span class="glyphicon glyphicon-lock"></span></td>
+		<td><input type="password" name="password2" required="required"></td></tr>
+	<tr><td>이름 <span class="glyphicon glyphicon-user"></span></td>	
+		<td><input type="text" name="name" required="required" 
+			th:value="${member.name }"></td></tr>
+	<tr><td>이메일 <span class="glyphicon glyphicon-envelope"></span></td>
+		<td><input type="email" name="email" required="required" 
+			th:value="${member.email }"></td></tr>
+	<tr><td>사진 <span class="glyphicon glyphicon-picture"></span></td>
+		<td><input type="file" name="file" th:text="${member.fileName}"></td></tr>
+	<tr><td>사진 <span class="glyphicon glyphicon-picture"></span></td>
+		<td><div id="drop"><div id="thumbnails"></div></div>
+			<img alt="" th:src="@{/images/}+${member.fileName }" width="200" id="pic"> </td></tr>
+	<tr><td colspan="2" align="center"><input type="submit" value="확인"
+		class="btn btn-warning" ></td></tr>		
+</table></form>
+<a href="loginForm.do" class="btn btn-success">로그인</a>
+</div>
+</body>
+</html>

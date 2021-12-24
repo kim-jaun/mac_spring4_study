@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8">
+<title>Insert title here</title></head><body>
+<span th:if="${result} > 0">
+	<script type="text/javascript">
+		alert("회원 가입 성공 !! 환영합니다");
+		location.href="loginForm.do";
+	</script>
+</span>
+<span th:if="${result} == 0">
+	<script type="text/javascript">
+		alert("회원 가입 실패 !! 다시 하셈");
+		history.go(-1);
+	</script>
+</span>
+<span th:if="${result} == -1">
+	<script type="text/javascript">
+		alert("중복됐다는데 !! 으이그");
+		history.go(-1);
+	</script>
+</span>
+</body>
+</html>

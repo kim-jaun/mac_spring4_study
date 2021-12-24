@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ch.member.mapper.MemberMapper">
+	<select id="select" parameterType="string" resultType="member">
+		select * from member3 where id=#{id}
+	</select>
+	<select id="listPhoto" parameterType="string" resultType="memberphoto">
+		select * from memberphoto where id=#{id}
+	</select>
+	<insert id="insert" parameterType="member">
+		insert into member3 values(#{id},#{email},#{password},#{name},
+			#{fileName},'n',sysdate)
+	</insert>
+	<insert id="insertPhotos" parameterType="java.util.List">
+		insert all
+			<!-- list에서 memberphoto하나씩 뽑아서 item넣고 입력처리를 반복 -->
+			<!-- get_seq대신에 memberphoto_seq.nextval에러 번호 하나만 생성 -->
+			<foreach collection="list" item="item">
+				into memberphoto values(get_seq, #{item.id}, #{item.fileName})
+			</foreach>
+		select * from dual
+	</insert>
+	<insert id="insertMp" parameterType="memberphoto">
+		insert into memberphoto values(memberphoto_seq.nextval, #{id},#{fileName})
+	</insert>
+	<update id="update" parameterType="member">
+		update member3 set email=#{email},password=#{password},name=#{name}
+		<!-- 파일이름이 있으면 파일을 변경하고 없으면 기존 이름을 유지해라 -->
+		<if test="fileName != null">
+			,fileName=#{fileName}
+		</if>
+		where id=#{id}
+	</update>
+	<update id="delete" parameterType="string">
+		update member3 set del='y' where id=#{id}
+	</update>
+</mapper>

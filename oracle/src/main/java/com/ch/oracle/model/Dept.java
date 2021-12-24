@@ -1,6 +1,6 @@
 package com.ch.oracle.model;
 import org.apache.ibatis.type.Alias;
-
+import lombok.Data;
 
 @Alias("dept")
 public class Dept {

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!-- boardList(백리향) jstl과 유사한 역할 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" >
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<style type="text/css"> 
+	.err {color: red; font-weight: bold; }
+	th { background: green; color: white; }
+</style>
+<script type="text/javascript">
+	$(function() {
+		$('#deptDisp').load("/dept/deptList.do");
+	});
+</script></head><body>
+<div class="container" align="center">
+	<h2 class="text-primary"><span th:text="${dept.dname}"></span>직원 목록</h2>
+<table class="table table-striped">
+	<tr><th>사번</th><th>이름</th><th>업무</th><th>입사일</th></tr>
+	<tr th:if="${#lists.size(empList)} == 0">
+		<td colspan="4">직원이 없는 부서입니다</td></tr>
+	<tr th:if="${#lists.size(empList)} > 0" th:each="emp:${empList}">
+		<td th:text="${emp.empno}"></td>
+		<td><a class="btn btn-success btn-sm" th:text="${emp.ename}"
+			th:href="@{/emp/empSelect.do(empno=${emp.empno})}"></a></td>
+		<td th:text="${emp.job}"></td>
+		<td th:text="${emp.hiredate}"></td></tr>
+</table>
+<a class="btn btn-info" href="/dept/deptList.do">부서목록</a>
+<a class="btn btn-warning" 
+	th:href="@{/emp/empInsertForm.do(deptno=${dept.deptno})}">직원정보 입력</a>
+</div>
+<div id="deptDisp"></div>
+</body>
+</html>

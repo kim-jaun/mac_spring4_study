@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ch.menu.mapper.EmpMapper">
+	<select id="list" parameterType="integer" resultType="emp">
+		select * from emp 
+		<!-- 0이면 모든 직원 0이 아니면 해당하는 부서 직원 -->
+		<if test="deptno != 0">
+			where deptno=#{deptno} 
+		</if>		
+		order by empno
+	</select>
+	<select id="select" parameterType="integer" resultType="emp">
+		select * from emp where empno=#{empno}
+	</select>
+	<select id="allList" resultType="emp">
+		select e.*, dname,loc from emp e, dept d where e.deptno=d.deptno
+	</select>
+	<update id="update" parameterType="emp">
+		update emp set ename=#{ename},job=#{job},mgr=#{mgr},
+			hiredate=#{hiredate},sal=#{sal},comm=#{comm},
+			deptno=#{deptno} where empno=#{empno}
+	</update>
+	<delete id="delete" parameterType="integer">
+		delete from emp where empno=#{empno}
+	</delete>
+	<insert id="insert" parameterType="emp">
+		insert into emp values(#{empno},#{ename},#{job},#{mgr},
+			#{hiredate},#{sal},#{comm},#{deptno})
+	</insert>
+</mapper>

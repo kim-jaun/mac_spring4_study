@@ -1,6 +1,7 @@
 package com.ch.oracle.model;
 import java.sql.Date;
 import org.apache.ibatis.type.Alias;
+import lombok.Data;
 
 @Alias("emp")
 public class Emp {
@@ -12,6 +13,9 @@ public class Emp {
 	private int sal;
 	private int comm;
 	private int deptno;
+	// join용
+	private String dname;
+	private String loc;
 	public int getEmpno() {
 		return empno;
 	}
@@ -59,5 +63,17 @@ public class Emp {
 	}
 	public void setDeptno(int deptno) {
 		this.deptno = deptno;
+	}
+	public String getDname() {
+		return dname;
+	}
+	public void setDname(String dname) {
+		this.dname = dname;
+	}
+	public String getLoc() {
+		return loc;
+	}
+	public void setLoc(String loc) {
+		this.loc = loc;
 	}
 }

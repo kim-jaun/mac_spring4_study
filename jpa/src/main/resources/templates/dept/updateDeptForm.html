@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!-- boardList(백리향) jstl과 유사한 역할 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" >
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<style type="text/css"> 
+	.err {color: red; font-weight: bold; }
+	th { background: green; color: white; }
+</style></head><body>
+<div class="container" align="center">
+	<h2 class="text-primary">부서정보 수정</h2>
+<form action="/dept/deptUpdate.do" method="post" name="frm">
+	<input type="hidden" name="deptno" th:value="${dept.deptno}">
+<table class="table table-bordered">
+	<tr><th>부서코드</th><td th:text="${dept.deptno}"></td></tr>
+	<tr><th>부서명</th><td><input type="text" name="dname" 
+		required="required" th:value="${dept.dname}"></td></tr>
+	<tr><th>근무지</th><td><input type="text" name="loc" 
+		required="required" th:value="${dept.loc}"></td></tr>
+	<tr><td colspan="2" align="center">
+		<input type="submit" value="확인" class="btn btn-success"></td></tr>
+</table>
+</form>
+<a class="btn btn-info" href="/dept/deptList.do">부서목록</a>
+</div>
+</body>
+</html>

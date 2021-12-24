@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!-- boardList(백리향) jstl과 유사한 역할 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" >
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<style type="text/css">
+	/*  drag & drop */
+	.drag-over { background-color:  yellow; }
+	.thumb { width: 100px; padding: 5px; float: left; }
+	.thumb > img { width: 50%; }
+	.thumb > .close { position: absolute; background-color: red; cursor: pointer; }
+	#drop { border: 1px solid black; width: 500px; height: 200px; padding:  3px; }
+</style>
+<script type="text/javascript">
+	function chk() {
+		if (frm.password.value != frm.password2.value) {
+			alert("암호와 암호 확인 다릅니다"); frm.password.focus();  // 커서
+			frm.password.value = "";	// 암호 데이터 지우기 
+			return false;   // action하지 마라
+		}
+	}
+	function idChk() {
+		if (!frm.id.value) {
+			alert("아이디를 입력한 후에 체크하시오");
+			frm.id.focus();	return false; 	}
+		// id ajax
+		$.post('idChk.do', 'id='+frm.id.value, function(data) {
+			$("#idChk1").html(data);
+		});
+	}
+	$(function() {
+		var uploadfiles = [];
+		var $drop = $('#drop');
+		$drop.on("dragenter", function(e) { //드래그 요소가 들어왔을떄
+			$('#msg').text("");
+			$(this).addClass('drag-over');			
+		}).on("dragleave", function(e) { //드래그 요소가 나갔을때
+			$('#msg').text("그림을 올려 놓으시오");
+			$(this).removeClass('drag-over');
+		}).on("dragover", function(e) {     // 드래그한 항목을 떨어뜨릴려고 올려 놨울 떄
+			e.stopPropagation();  // 이밴트를 전달하지 마라
+			e.preventDefault();   // 원래 자체 기능를 하지 마라
+		}).on("drop", function(e) {        // 드래그한 항목을 떨어뜨릴 때
+			e.preventDefault();  
+			$(this).removeClass('drag-over');
+			var files = e.originalEvent.dataTransfer.files; // 드래그 한 항복
+			for (var i =0; i < files.length; i++) {
+				var file = files[i];
+				var size = uploadfiles.push(file); // 업로드 목록에 추가
+				preview(file, size - 1); // 미리보기
+			}
+		});	
+		$('#submit').on('click', function() {
+			var formData = new FormData();
+			formData.append('id', frm.id.value);
+			formData.append('name', frm.name.value);
+			formData.append('password', frm.password.value);
+			formData.append('email', frm.email.value);
+			$.each(uploadfiles, function(i, file) {
+				if (file.upload != 'disable') // 사용하지 파일은 제외하고
+					formData.append('file',file,file.name);
+			});
+			$.ajax({
+				url:'join2.do', data:formData,type:'post',
+				contentType:false,	processData:false,	enctype:'multipart/form-data',
+				success: function(data) {
+					$('form').hide();
+					$('#disp').html(data);
+				}
+			});
+		});
+		$("#thumbnails").on('click', function(e) {
+			var $target = $(e.target);
+			var idx = $target.attr('data-idx');
+			uploadfiles[idx].upload = 'disable';  // 삭제된 항목은 업로드 금지
+			$target.parent().remove(); // x를 클릭한 그림 삭제
+		});
+	});
+	function preview(file, idx) {
+		var reader = new FileReader();
+		reader.onload = (function(f, idx) {
+			return function(e) {
+				var div = '<div class="thumb"><div class="close" data-idx="'+idx+
+					'">X</div><img src="'+e.target.result+ '" title="'+escape(f.name)+'"/></div>';
+				$("#thumbnails").append(div);
+			};
+		})(file,idx);
+		reader.readAsDataURL(file);
+		// readAsDataURL : 컨텐츠를 특정 Blob 이나 File에서 읽어 오는 역할을 합니다
+	}	
+</script></head><body>
+<div class="container" align="center">
+	<h2 class="text-primary">회원 가입</h2>
+<form action="join2.do" method="post" enctype="multipart/form-data" 
+	name="frm" onsubmit="return chk()">
+<table class="table table-bordered table-hover">
+	<tr><td>아이디 <span class="glyphicon glyphicon-user"></span></td>
+		<td><input type="text" name="id" required="required" autofocus="autofocus">
+			<input type="button" class="btn btn-info btn-sm" onclick="idChk()"
+				value="중복체크"><div id="idChk1" class="err"></div></td></tr>
+	<tr><td>암호 <span class="glyphicon glyphicon-lock"></span></td>
+		<td><input type="password" name="password" required="required"></td></tr>
+	<tr><td>암호확인 <span class="glyphicon glyphicon-lock"></span></td>
+		<td><input type="password" name="password2" required="required"></td></tr>
+	<tr><td>이름 <span class="glyphicon glyphicon-user"></span></td>	
+		<td><input type="text" name="name" required="required"></td></tr>
+	<tr><td>이메일 <span class="glyphicon glyphicon-envelope"></span></td>
+		<td><input type="email" name="email" required="required"></td></tr>
+<!--<tr><td>사진 <span class="glyphicon glyphicon-picture"></span></td>
+		<td><input type="file" name="file" required="required" multiple="multiple"></td></tr> -->
+	<tr><td>사진  <span class="glyphicon glyphicon-picture"></span></td>
+		<td><div id="drop"><div id="msg">그림을 올려 놓으세요</div>
+			<div id="thumbnails"></div></div></tr>
+	<tr><td colspan="2" align="center"><input type="button" value="확인"
+		class="btn btn-warning" id="submit"></td></tr>		
+</table></form>
+<div id="disp"></div>
+<a href="loginForm.do" class="btn btn-success">로그인</a>
+</div>
+</body>
+</html>

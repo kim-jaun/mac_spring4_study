@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Insert title here</title>
+</head><body>
+<span th:if="${result} > 0">
+	<script type="text/javascript">
+		alert("입력 성공");
+		location.href="empSelect.do?empno="+[[${emp.empno}]];
+	</script>
+</span>
+<span th:if="${result} == 0">
+	<script type="text/javascript">
+		alert("입력 실패");
+		history.back();
+	</script>
+</span>
+<span th:if="${result} == 0">
+	<script type="text/javascript">
+		alert("이미 있는 데이터야");
+		history.back();
+	</script>
+</span>
+</body>
+</html>

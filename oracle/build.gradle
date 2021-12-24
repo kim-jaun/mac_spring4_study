@@ -23,12 +23,27 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+	implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '4.2.1.RELEASE'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
+	runtimeOnly 'com.h2database:h2' 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    
+
+    // Oracle 지갑 관련
+    implementation 'com.oracle.ojdbc:ucp'
+    // https://mvnrepository.com/artifact/com.oracle.database.security/oraclepki
+    implementation 'com.oracle.database.security:oraclepki'
+    // https://mvnrepository.com/artifact/com.oracle.database.security/osdt_core
+    implementation 'com.oracle.database.security:osdt_core'
+    // https://mvnrepository.com/artifact/com.oracle.database.security/osdt_cert
+    implementation 'com.oracle.database.security:osdt_cert'
 }
 
 test {

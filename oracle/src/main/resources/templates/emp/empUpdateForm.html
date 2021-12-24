@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- boardList(백리향) jstl과 유사한 역할 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" >
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<style type="text/css"> 
+	.err {color: red; font-weight: bold; }
+	th { background: green; color: white; }
+</style>
+</head><body>
+<div class="container" align="center">
+	<h2 class="text-primary">직원정보 수정</h2>
+<form action="/emp/empUpdate.do" method="post" name="frm">
+	<input type="hidden" name="empno" th:value="${emp.empno}">
+<table class="table table-bordered">
+	<tr><th>사번</th><td th:text="${emp.empno}"></td></tr>
+	<tr><th>이름</th><td><input type="text" name="ename" required="required"
+		th:value="${emp.ename}"></td></tr>
+	<tr><th>업무</th><td><input type="text" name="job" required="required"
+		th:value="${emp.job}"></td></tr>
+	<tr><th>관리자 사번</th><td><select name="mgr">
+		<option th:each="e:${empList}" th:value="${e.empno}"
+			th:text="${e.ename}+'('+${e.empno}+')'"
+			th:if="${emp.mgr==e.empno}" selected="selected"></option>
+		<option th:each="e:${empList}" th:value="${e.empno}"
+			th:text="${e.ename}+'('+${e.empno}+')'"
+			th:if="${emp.mgr!=e.empno}"></option>
+	</select></td></tr>
+	<tr><th>입사일</th><td><input type="date" name="hiredate" 
+		required="required" th:value="${emp.hiredate}"></td></tr>
+	<tr><th>급여</th><td><input type="number" name="sal" 
+		required="required" th:value="${emp.sal}"></td></tr>
+	<tr><th>COMM</th><td><input type="number" name="comm" 
+		required="required" th:value="${emp.comm}"></td></tr>
+	<tr><th>부서코드</th><td><select name="deptno">
+		<option th:each="d:${deptList}" th:value="${d.deptno}"
+			th:text="${d.dname}+'('+${d.deptno}+')'"
+			th:if="${emp.deptno!=d.deptno}"></option>
+		<option th:each="d:${deptList}" th:value="${d.deptno}"
+			th:text="${d.dname}+'('+${d.deptno}+')'"
+			th:if="${emp.deptno==d.deptno}" selected="selected"></option>
+		</select></td></tr>
+	<tr><td colspan="2" align="center">
+		<input type="submit" class="btn btn-danger"></td></tr>
+</table>
+</form>
+</div>
+</body>
+</html>

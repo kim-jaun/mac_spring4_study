@@ -16,7 +16,7 @@ public class EmpController {
 	private EmpService es;
 	@Autowired
 	private DeptService ds;
-	@RequestMapping("empList")
+	@RequestMapping("/emp/empList.do")
 	public String empList(int deptno, Model model) {
 		Dept dept = ds.select(deptno);
 		List<Emp> empList = es.list(deptno);
@@ -24,7 +24,7 @@ public class EmpController {
 		model.addAttribute("empList", empList);
 		return "/emp/empList";
 	}
-	@RequestMapping(value = "empnoChk", produces = "text/html;charset=utf-8")
+	@RequestMapping(value = "/emp/empnoChk.do", produces = "text/html;charset=utf-8")
 	@ResponseBody
 	public String empnoChk(int empno) {
 		String data = "";
@@ -33,16 +33,16 @@ public class EmpController {
 		else data = "사용중이니 다른 사번을 입력하시오";
 		return data;
 	}
-	@RequestMapping("empInsertForm")
+	@RequestMapping("/emp/empInsertForm.do")
 	public String empInsertForm(int deptno, Model model) {
 		List<Dept> deptList = ds.list();  // 부서코드를 선택
-		List<Emp> empList = es.empList(); // 관리자를 선택하기 위해
+		List<Emp> empList = es.list(0); // 관리자를 선택하기 위해
 		model.addAttribute("deptList", deptList);
 		model.addAttribute("empList", empList);
 		model.addAttribute("deptno", deptno);
 		return "/emp/empInsertForm";
 	}
-	@RequestMapping("empInsert")
+	@RequestMapping("/emp/empInsert.do")
 	public String empInsert(Emp emp, Model model) {
 		int result = 0;  // 입력 실패
 		Emp emp2 = es.select(emp.getEmpno());
@@ -52,24 +52,24 @@ public class EmpController {
 		model.addAttribute("emp", emp);
 		return "/emp/empInsert";
 	}
-	@RequestMapping("empUpdateForm")
+	@RequestMapping("/emp/empUpdateForm.do")
 	public String empUpdateForm(int empno, Model model) {
 		Emp emp = es.select(empno);
 		List<Dept> deptList = ds.list();  // 부서코드를 선택
-		List<Emp> empList = es.empList(); // 관리자를 선택하기 위해
+		List<Emp> empList = es.list(0); // 관리자를 선택하기 위해
 		model.addAttribute("deptList", deptList);
 		model.addAttribute("empList", empList);
 		model.addAttribute("emp", emp);
 		return "/emp/empUpdateForm";
 	}
-	@RequestMapping("empUpdate")
+	@RequestMapping("/emp/empUpdate.do")
 	public String empUpdate(Emp emp, Model model) {
 		int result = es.update(emp);
 		model.addAttribute("result", result);
 		model.addAttribute("emp", emp);
 		return "/emp/empUpdate";
 	}
-	@RequestMapping("empDelete")
+	@RequestMapping("/emp/empDelete.do")
 	public String empDelete(int empno, Model model) {
 		Emp emp = es.select(empno);
 		int result = es.delete(empno);
@@ -77,13 +77,13 @@ public class EmpController {
 		model.addAttribute("emp", emp);
 		return "/emp/empDelete";
 	}
-	@RequestMapping("allEmpList")
+	@RequestMapping("/emp/empAllList.do")
 	public String allEmpList(Model model) {
 		List<Emp> list = es.allList();
 		model.addAttribute("list", list);
 		return "emp/allEmpList";
 	}
-	@RequestMapping("empSelect")
+	@RequestMapping("/emp/empSelect.do")
 	public String empSelect(int empno, Model model) {
 		Emp emp = es.select(empno);
 		model.addAttribute("emp", emp);
